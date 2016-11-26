@@ -12,21 +12,37 @@ class FileICal(object):
 
     def getEventsNextWeek(self):
         events = []
-        nextweek = date.today() + timedelta(days=20)
-        today = date.today()
+        target = date.today() + timedelta(days=4)
         for event in self._events:
             try:
                 eventdate = event["DTSTART"].dt.date()
             except AttributeError:
                 eventdate = event["DTSTART"].dt
-            if nextweek > eventdate >= (today):
+            if target == eventdate:
                 events.append(event)
         return events
 
     def formWallMessage(self, events):
         messages = []
         for event in events:
-            stringi = "Please keep in mind that the Event %s will hapen on Cam on the %s" % \
-                      (event['SUMMARY'], event["DTSTART"].dt.strftime("%d.%m"))
+            if event["STATUS"] != "CONFIRMED":
+                continue
+            stringi = "Please keep in mind that the Event %s will hapen on Cam on the %s.\n" % \
+                      ( event['SUMMARY'], event["DTSTART"].dt.strftime("%d.%m"))
+            if event["DTSTART"].dt.strftime("%H.%M") == "00.00":
+                stringi = stringi + " This will be an all day event.\n"
+            else:
+                stringi = stringi + " Start: %s End: %s\n" % \
+                                    (event["DTSTART"].dt.strftime("%H.%M"),
+                                     event["DTEND"].dt.strftime("%H.%M"))
+            try:
+                stringi = stringi + " Location: %s"% event["LOCATION"] + "\n"
+            except:
+                pass
+            try:
+                stringi = stringi + "Additional Notes:%s \n"% event['DESCRIPTION']
+            except:
+                pass
             messages.append(stringi)
+        print(messages)
         return messages
