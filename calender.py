@@ -27,7 +27,7 @@ class FileICal(object):
         for event in events:
             if event["STATUS"] != "CONFIRMED":
                 continue
-            stringi = "Please keep in mind that the Event %s will hapen on Cam on the %s.\n" % \
+            stringi = "Please keep in mind that the Event %s will happen on Cam on the %s.\n" % \
                       ( event['SUMMARY'], event["DTSTART"].dt.strftime("%d.%m"))
             if event["DTSTART"].dt.strftime("%H.%M") == "00.00":
                 stringi = stringi + " This will be an all day event.\n"
