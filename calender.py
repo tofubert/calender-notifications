@@ -12,7 +12,7 @@ class FileICal(object):
 
     def getEventsNextWeek(self):
         events = []
-        target = date.today() + timedelta(days=4)
+        target = date.today() + timedelta(days=3)
         for event in self._events:
             try:
                 eventdate = event["DTSTART"].dt.date()
@@ -33,8 +33,8 @@ class FileICal(object):
                 stringi = stringi + " This will be an all day event.\n"
             else:
                 stringi = stringi + " Start: %s End: %s\n" % \
-                                    (event["DTSTART"].dt.strftime("%H.%M"),
-                                     event["DTEND"].dt.strftime("%H.%M"))
+                                    (event["DTSTART"].dt.strftime("%H.%M %d.%m.%y"),
+                                     event["DTEND"].dt.strftime("%H.%M %d.%m.%y"))
             try:
                 stringi = stringi + " Location: %s"% event["LOCATION"] + "\n"
             except:
